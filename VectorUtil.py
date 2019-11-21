@@ -82,7 +82,3 @@ def get_angular_distance(user_origin, start, end):
 
 
 
-
-
-
-
