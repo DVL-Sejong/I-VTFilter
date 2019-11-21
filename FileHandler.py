@@ -41,3 +41,15 @@ def dict_to_list(raw_data):
         gaze_data = GazeData(id, name, time, order, point)
         data_list.append(gaze_data)
     return data_list
+
+
+def save_data(threshold_and_number_of_fixations, filename):
+    path = get_path("result") + filename + ".csv"
+    threshold = [element[0] for element in threshold_and_number_of_fixations]
+    number_of_fixations = [element[1] for element in threshold_and_number_of_fixations]
+    dictionary = {
+        'result': threshold,
+        'number_of_fixations': number_of_fixations
+    }
+    dataframe = pd.DataFrame(dictionary)
+    dataframe.to_csv(path, index=False, columns=['result', 'number_of_fixations'])

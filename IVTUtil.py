@@ -35,8 +35,9 @@ def classify_into_fixation(filename, frequency, threshold):
             buffer.pop(0)
 
     velocities.sort()
+    list(set(velocities))
 
-    return gaze_data, velocities[math.floor(len(velocities)/2)]
+    return gaze_data, velocities
 
 
 def extract_fixation_saccade_centroid_line(gaze_data):
@@ -55,6 +56,8 @@ def get_saccade_line(centroids):
 
 def convert_line_into_point(saccade_line):
     points = []
+    if len(saccade_line) == 0: return points
+
     x_list = saccade_line[:, :, 0].T
     y_list = saccade_line[:, :, 1].T
     for i in range(len(x_list)):
