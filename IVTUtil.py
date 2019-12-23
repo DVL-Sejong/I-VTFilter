@@ -42,8 +42,8 @@ def classify_into_fixation(filename, frequency, threshold):
 
 def extract_fixation_saccade_centroid_line(gaze_data):
     fixation, saccade = get_fixation_and_saccade(gaze_data)
-    centroids, line = get_centroids_and_line(gaze_data)
-    return fixation, saccade, centroids, line
+    centroids, line, parts = get_centroids_and_line(gaze_data)
+    return fixation, saccade, centroids, line, parts
 
 
 def get_saccade_line(centroids):
@@ -67,19 +67,21 @@ def convert_line_into_point(saccade_line):
 
 def get_centroids_and_line(gaze_data):
     centroids = []
+    parts = []
     index = 0
 
     while index < len(gaze_data) - 1:
         if gaze_data[index].movement_type is constant.FIXATION:
-            centroid, index = centroid_of_fixation(gaze_data, index)
+            centroid, index, part = centroid_of_fixation(gaze_data, index)
             centroids.append(centroid)
+            parts.append(part)
         elif gaze_data[index].movement_type is constant.SACCADE:
             index = get_first_fixation_index(gaze_data, index)
         else:
             break
 
     lines = get_saccade_line(centroids)
-    return centroids, lines
+    return centroids, lines, parts
 
 
 def get_first_fixation_index(gaze_data, index):
@@ -89,6 +91,7 @@ def get_first_fixation_index(gaze_data, index):
 
 
 def centroid_of_fixation(gaze_data, index):
+    start = index
     count = 0
     x_sum = 0
     y_sum = 0
@@ -97,13 +100,13 @@ def centroid_of_fixation(gaze_data, index):
         y_sum += gaze_data[index].point.y
         index += 1
         count += 1
-    return Point2D(x_sum / count, y_sum / count), index
+    return Point2D(x_sum / count, y_sum / count), index, [start, index - 1]
 
 
 def get_fixation_and_saccade(gaze_data):
     fixation = []
     saccade = []
-    for data in gaze_data:
+    for index, data in enumerate(gaze_data):
         if data.movement_type is constant.FIXATION:
             fixation.append(data.point)
         elif data.movement_type is constant.SACCADE:
