@@ -3,6 +3,11 @@ import shutil
 import src.handlers.Path as Path
 
 
+def preprocess_directories(filenames):
+    create_directory("result")
+    for name in filenames: create_directory(name)
+
+
 def create_new_directories(csv_file_name, count_of_fixations):
     path = Path.get_origin_path(csv_file_name)
     for i in range(count_of_fixations):

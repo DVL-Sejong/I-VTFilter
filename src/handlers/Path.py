@@ -1,6 +1,7 @@
 import os
 from os import listdir
 from os.path import isfile, join
+from pathlib import Path
 
 
 def get_destination_path(csv_file_path, number, threshold):
@@ -27,7 +28,9 @@ def get_file_names(directory):
 
 def get_path(directory):
     path = os.path.dirname(os.path.realpath(__file__))
-    path += "\\" + directory + "\\"
+    path = Path(path).parent
+    path = Path(path).parent
+    path = str(path) + "\\" + directory + "\\"
     return path
 
 

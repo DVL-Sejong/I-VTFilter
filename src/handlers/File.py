@@ -32,23 +32,23 @@ def save_data(threshold_and_number_of_fixations, file_name):
 
 
 def save_statistics(csv_file_name, number_of_fixations, new_threshold):
-    fixation_path = csv_file_name.split(".")[0] + "\\fixation_statistics.csv"
-    velocity_path = csv_file_name.split(".")[0] + "\\velocity_statistics.csv"
+    fixation_path = Path.get_path("result") + "\\" + csv_file_name.split(".")[0] + "\\fixation_statistics.csv"
+    velocity_path = Path.get_path("result") + "\\" + csv_file_name.split(".")[0] + "\\velocity_statistics.csv"
     fixation_dictionary = {
-        'fixation 평균 수': [sum(number_of_fixations, 0.0) / len(number_of_fixations)],
-        'fixation 최소': [min(number_of_fixations)],
-        'fixation 최대': [max(number_of_fixations)],
-        'fixation 수 표준편차': [numpy.std(number_of_fixations)],
-        'fixation 분산': [numpy.var(number_of_fixations)]
+        'average number of fixations': [sum(number_of_fixations, 0.0) / len(number_of_fixations)],
+        'minimum value of fixations': [min(number_of_fixations)],
+        'maximum value of fixations': [max(number_of_fixations)],
+        'standard deviation of number of fixations': [numpy.std(number_of_fixations)],
+        'dispersion of fixation': [numpy.var(number_of_fixations)]
     }
     velocity_dictionary = {
-        'velocity 갯수:': [len(number_of_fixations)],
-        'velocity 평균': [numpy.mean(new_threshold)],
-        'velocity 중앙값': [new_threshold[numpy.math.floor(len(new_threshold) / 2)]],
-        'velocity 최소': [min(new_threshold)],
-        'velocity 최대': [max(new_threshold)],
-        'velocity 표준편차': [numpy.std(new_threshold)],
-        'velocity 분산': [numpy.var(new_threshold)]
+        'number of velocities': [len(number_of_fixations)],
+        'average of velocities': [numpy.mean(new_threshold)],
+        'median': [new_threshold[numpy.math.floor(len(new_threshold) / 2)]],
+        'minimum': [min(new_threshold)],
+        'maximum': [max(new_threshold)],
+        'standard deviation': [numpy.std(new_threshold)],
+        'dispersion': [numpy.var(new_threshold)]
     }
     fixation_frame = pd.DataFrame(fixation_dictionary)
     fixation_frame.to_csv(fixation_path, index=False, columns=constant.FIXATION_COLUMNS)

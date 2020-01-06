@@ -13,5 +13,15 @@ PLOT_IMAGE = 1
 FREQUENCY = 60
 BASIC_THRESHOLD = 30
 
-FIXATION_COLUMNS = ['fixation 평귶 수', 'fixation 최소', 'fixation 최대', 'fixation 수 표준편차', 'fixation 분산']
-VELOCITY_COLUMNS = ['velocity 갯수', 'velocity 평균', 'velocity 중앙값', 'velocity 최소', 'velocity 최대', 'velocity 표쥰편차', 'velocity 분산']
+FIXATION_COLUMNS = ['average number of fixations',
+                    'minimum value of fixations',
+                    'maximum value of fixations',
+                    'standard deviation of number of fixations',
+                    'dispersion of fixation']
+VELOCITY_COLUMNS = ['number of velocities',
+                    'average of velocities',
+                    'median',
+                    'minimum',
+                    'maximum',
+                    'standard deviation',
+                    'dispersion']

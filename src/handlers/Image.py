@@ -1,12 +1,12 @@
 from matplotlib.pyplot import figure
 import matplotlib.pyplot as plt
-from src.handlers import File
+from src.handlers import File, Directory, Path
 from src import constant
 import numpy
 
 
 def plot_filtered_data(plot_type, analyzed_data, filename):
-    if plot_type is constant.SAVE_IMAGE and File.is_image_exists(filename): return
+    if plot_type is constant.SAVE_IMAGE and Directory.is_image_exists(filename): return
 
     fig, ax = plt.subplots()
     background = plt.imread("image\\i-vt_image_re.png")
@@ -29,15 +29,17 @@ def plot_filtered_data(plot_type, analyzed_data, filename):
     plt.gca().invert_yaxis()
 
     if plot_type is constant.PLOT_IMAGE: plt.show()
-    else: plt.savefig(File.get_image_path(filename))
+    else: plt.savefig(Path.get_image_path(filename))
 
 
 def plot_fixation_numbers(result_list, count_of_fixations, csv_file_name):
     figure(num=None, figsize=(12, 10), dpi=80, facecolor='w', edgecolor='k')
     path = csv_file_name.split(".")[0] + "\\fixation_numbers"
-    plt.scatter([index for index in result_list], [count for count in count_of_fixations], color='black', alpha=0.5)
-    plt.title("Fixtation numbers")
-    plt.xlabel("X axis")
-    plt.xticks(numpy.arange(0, len(result_list), step=50), [index for index in result_list], rotation=75)
-    plt.ylabel("Y axis")
-    plt.savefig(File.get_image_path(path))
+    plt.plot([index for index in result_list], [count for count in count_of_fixations], color='black', alpha=0.5)
+    plt.xlabel("Velocity Threshold")
+    stem = int(len(result_list) / 5)
+    tick_val = [result_list[stem], result_list[stem * 2], result_list[stem * 3], result_list[stem * 4]]
+    tick_lab = ['%0.4f' % float(item) for item in tick_val]
+    plt.xticks(tick_val, tick_lab)
+    plt.ylabel("Number of Fixations")
+    plt.savefig(Path.get_image_path(path))

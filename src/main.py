@@ -1,23 +1,18 @@
-from src.handlers import File, Image
+from src.handlers import File, Image, Path, Directory
 from src import constant
 from src.objects.AnalyzedData import AnalyzedData
 from src.objects.IVTData import IVTData
 
 
 def get_unanalyzed_filenames():
-    files = File.get_file_names("data")
+    files = Path.get_file_names("data")
 
     unanalyzed_files = []
     for file in files:
-        if File.is_result_exists(file): continue
+        if Directory.is_result_exists(file): continue
         unanalyzed_files.append(file)
 
     return unanalyzed_files
-
-
-def preprocess_directories(filenames):
-    File.create_directory("result")
-    for name in filenames: File.create_directory(name)
 
 
 def classify_gaze_data(gaze_datas, frequency, threshold):
@@ -64,16 +59,16 @@ def analyze_gaze_data(file, gaze_data, velocities):
 
 
 def classify_images():
-    files = File.get_file_names("result")
+    files = Path.get_file_names("result")
 
     for i, csv_file_name in enumerate(files):
         result_list, count_of_fixations = File.load_spectrum_data(csv_file_name)
-        File.create_new_directories(csv_file_name, count_of_fixations)
+        Directory.create_new_directories(csv_file_name, count_of_fixations)
 
-        if File.is_image_exists(csv_file_name.split(".")[0] + "\\fixation_numbers"):
+        if Directory.is_image_exists(csv_file_name.split(".")[0] + "\\fixation_numbers"):
             continue
 
-        File.move_image_files(csv_file_name, result_list)
+        Directory.move_image_files(csv_file_name, result_list)
 
         threshold, number_of_fixations = File.load_spectrum_raw_data(csv_file_name)
         Image.plot_fixation_numbers(threshold, number_of_fixations, csv_file_name)
@@ -83,7 +78,7 @@ def classify_images():
 
 if __name__ == "__main__":
     names = get_unanalyzed_filenames()
-    preprocess_directories(names)
+    Directory.preprocess_directories(names)
     preprocessed_data = preprocess_data(names)
     analyze_and_save_data(preprocessed_data)
     classify_images()
