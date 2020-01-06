@@ -3,39 +3,24 @@ import matplotlib.pyplot as plt
 import FileHandler
 import constant
 import numpy
-from random import randint
 
 
-def generate_color():
-    colors = []
-    for i in range(30):
-        colors.append('#%06X' % randint(0, 0xFFFFFF))
-    return colors
+def plot_filtered_data(plot_type, analyzed_data, filename):
+    if plot_type is constant.SAVE_IMAGE and FileHandler.is_image_exists(filename): return
 
-
-def plot_filtered_data(plot_type, classified_data, fixation, saccade, centroids, line, parts, filename):
     fig, ax = plt.subplots()
-    img = plt.imread("image\\i-vt_image_re.png")
-    ax.imshow(img, extent=[0, 1920, 0, 1080], alpha=0.5, origin='lower')
+    background = plt.imread("image\\i-vt_image_re.png")
+    ax.imshow(background, extent=[0, 1920, 0, 1080], alpha=0.5, origin='lower')
+
+    line = analyzed_data.centroids_lines if analyzed_data.centroids_lines is not None else []
+    saccade = analyzed_data.saccades
+    fixation = analyzed_data.fixations
+    centroids = analyzed_data.centroids if analyzed_data.centroids is not None else []
 
     plt.plot([point.x for point in line], [point.y for point in line], color='black')
     plt.scatter([sac.x for sac in saccade], [sac.y for sac in saccade], color='black', alpha=0.5)
     plt.scatter([fix.x for fix in fixation], [fix.y for fix in fixation], color='black', alpha=0.5)
     plt.scatter([center.x for center in centroids], [center.y for center in centroids], color='blue', s=80)
-
-    # colors = generate_color()
-    # for c, part in enumerate(parts):
-    #     start = part[0]
-    #     end = part[1]
-    #     x_list = []
-    #     y_list = []
-    #     for index in range(start, end + 1):
-    #         x_list.append(classified_data[index].point.x)
-    #         y_list.append(classified_data[index].point.y)
-    #     plt.scatter(x_list, y_list, color=colors[c % 30], alpha=0.5)
-    #     # print(str(c % 10))
-
-
 
     plt.title("Fixtation detected")
     plt.xlabel("X axis")
