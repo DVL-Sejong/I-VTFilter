@@ -31,6 +31,8 @@ def plot_filtered_data(plot_type, analyzed_data, filename):
     if plot_type is constant.PLOT_IMAGE: plt.show()
     else: plt.savefig(Path.get_image_path(filename))
 
+    plt.clf()
+
 
 def plot_fixation_numbers(result_list, count_of_fixations, csv_file_name):
     figure(num=None, figsize=(12, 10), dpi=80, facecolor='w', edgecolor='k')
